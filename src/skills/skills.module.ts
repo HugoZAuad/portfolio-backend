@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { SkillsController } from './skills.controller';
-import { SkillsService } from './skills.service';
+import { SkillsController } from './controllers/skills.controller';
+import { SkillsService } from './services/skills.service';
 
 @Module({
   controllers: [SkillsController],
