@@ -1,4 +1,47 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+  Request,
+  Get,
+  Res,
+} from '@nestjs/common';
+import { AuthService } from '../services/auth.service';
+import { LoginDto } from '../DTO/login.dto';
+import { JwtAuthGuard } from '../../../shared/guards/jwt-auth.guard';
+import { EmailGuard } from '../../../shared/guards/email.guard';
+import { Response } from 'express';
+import { User } from '@prisma/client';
 
 @Controller('auth')
-export class AuthController {}
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
+  @UseGuards(EmailGuard)
+  @Post('login')
+  login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
+    try {
+      const result = this.authService.login(loginDto);
+      if ('error' in result) {
+        return { message: result.error };
+      }
+      res.cookie('jwt', result.access_token, { httpOnly: true, secure: false }); // secure: true in production
+      return result;
+    } catch (error) {
+      return { message: error.message };
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Request() req): User {
+    return req.user as User;
+  }
+
+  @Get('logout')
+  logout(@Res() res: Response) {
+    res.clearCookie('jwt');
+    res.redirect('/');
+  }
+}
