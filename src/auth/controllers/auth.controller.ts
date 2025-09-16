@@ -9,8 +9,10 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { LoginDto } from '../DTO/login.dto';
-import { JwtAuthGuard } from '../../../shared/guards/jwt-auth.guard';
+
 import { EmailGuard } from '../../../shared/guards/email.guard';
+import { Public } from '../../../shared/decorators/public.decorator';
+import { JwtAuthGuard } from '../../../shared/guards/jwt-auth.guard';
 import { Response } from 'express';
 import { User } from '@prisma/client';
 
@@ -18,6 +20,7 @@ import { User } from '@prisma/client';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @UseGuards(EmailGuard)
   @Post('login')
   login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
@@ -26,7 +29,7 @@ export class AuthController {
       if ('error' in result) {
         return { message: result.error };
       }
-      res.cookie('jwt', result.access_token, { httpOnly: true, secure: false }); // secure: true in production
+      res.cookie('jwt', result.access_token, { httpOnly: true, secure: false });
       return result;
     } catch (error) {
       return { message: error.message };
@@ -39,6 +42,7 @@ export class AuthController {
     return req.user as User;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('logout')
   logout(@Res() res: Response) {
     res.clearCookie('jwt');

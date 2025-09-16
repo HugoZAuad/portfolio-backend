@@ -7,17 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  password String
-}
-
 model Project {
   id          Int            @id @default(autoincrement())
   title       String
   description String
-  link        String?
+  linkRepo    String?
+  linkDeploy  String?
   createdAt   DateTime       @default(now())
   images      ProjectImage[]
 }
