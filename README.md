@@ -12,8 +12,6 @@ API backend construída com NestJS para gerenciar projetos e habilidades.
 - [Cloudinary](https://cloudinary.com/) - Serviço para upload e gerenciamento de imagens.
 - [JWT](https://jwt.io/) - Autenticação via JSON Web Tokens.
 - [Multer](https://github.com/expressjs/multer) - Middleware para upload de arquivos.
-- [Jest](https://jestjs.io/) - Framework de testes.
-- [Supertest](https://github.com/visionmedia/supertest) - Testes end-to-end para APIs.
 
 ---
 
