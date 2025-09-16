@@ -1,6 +1,6 @@
 # Portfolio Backend API
 
-API backend construída com NestJS para gerenciar projetos, habilidades e autenticação de usuários.
+API backend construída com NestJS para gerenciar projetos e habilidades.
 
 ---
 
