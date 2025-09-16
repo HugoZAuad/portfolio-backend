@@ -12,9 +12,9 @@ export class EmailGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const { email } = request.body;
+    const user = request.user;
 
-    if (email !== 'hugozeymer@gmail.com') {
+    if (!user || user.email !== 'hugozeymer@gmail.com') {
       throw new UnauthorizedException('Acesso negado.');
     }
 

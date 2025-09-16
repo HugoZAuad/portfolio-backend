@@ -24,8 +24,15 @@ model ProjectImage {
   projectId Int
 }
 
+enum SkillLevel {
+  basico
+  intermediario
+  avancado
+  especialista
+}
+
 model Skill {
-  id    Int    @id @default(autoincrement())
+  id    Int        @id @default(autoincrement())
   name  String
-  level Int
+  level SkillLevel
 }

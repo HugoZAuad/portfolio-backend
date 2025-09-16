@@ -11,7 +11,8 @@ import {
 
 import { JwtAuthGuard } from '../../../shared/guards/jwt-auth.guard';
 
-import { ProjectsReadService } from '../services/projects-read.service';
+import { ProjectsFindAllService } from '../services/projects-find-all.service';
+import { ProjectsFindOneService } from '../services/projects-find-one.service';
 import { ProjectsWriteService } from '../services/projects-write.service';
 import { ProjectsUpdateService } from '../services/projects-update.service';
 import { ProjectsDeleteService } from '../services/projects-delete.service';
@@ -27,7 +28,8 @@ import { EmailGuard } from 'shared/guards/email.guard';
 @Controller('projects')
 export class ProjectsController {
   constructor(
-    private readonly projectsReadService: ProjectsReadService,
+    private readonly projectsFindAllService: ProjectsFindAllService,
+    private readonly projectsFindOneService: ProjectsFindOneService,
     private readonly projectsWriteService: ProjectsWriteService,
     private readonly projectsUpdateService: ProjectsUpdateService,
     private readonly projectsDeleteService: ProjectsDeleteService,
@@ -36,13 +38,13 @@ export class ProjectsController {
   @UseGuards(JwtAuthGuard, EmailGuard)
   @Get()
   async findAll(): Promise<ProjectWithImages[]> {
-    return this.projectsReadService.findAll();
+    return this.projectsFindAllService.findAll();
   }
 
   @UseGuards(JwtAuthGuard, EmailGuard)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<ProjectWithImages> {
-    return this.projectsReadService.findOne(+id);
+    return this.projectsFindOneService.findOne(+id);
   }
 
   @UseGuards(JwtAuthGuard, EmailGuard)

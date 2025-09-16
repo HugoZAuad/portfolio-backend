@@ -14,7 +14,7 @@ import { EmailGuard } from '../../../shared/guards/email.guard';
 import { Public } from '../../../shared/decorators/public.decorator';
 import { JwtAuthGuard } from '../../../shared/guards/jwt-auth.guard';
 import { Response } from 'express';
-import { User } from '@prisma/client';
+import { User } from '../interface/user.interface';
 
 @Controller('auth')
 export class AuthController {
