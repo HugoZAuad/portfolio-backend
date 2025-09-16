@@ -7,7 +7,10 @@ import {
   Body,
   Param,
   UseGuards,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 import { JwtAuthGuard } from '../../../shared/guards/jwt-auth.guard';
 
@@ -49,10 +52,12 @@ export class ProjectsController {
 
   @UseGuards(JwtAuthGuard, EmailGuard)
   @Post()
+  @UseInterceptors(FilesInterceptor('image', 10))
   async create(
     @Body() createProjectDto: CreateProjectDto,
+    @UploadedFiles() files?: Express.Multer.File[],
   ): Promise<ProjectResponse> {
-    return this.projectsWriteService.create(createProjectDto);
+    return this.projectsWriteService.create(createProjectDto, files);
   }
 
   @UseGuards(JwtAuthGuard, EmailGuard)

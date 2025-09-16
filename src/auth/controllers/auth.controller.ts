@@ -21,7 +21,6 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
-  @UseGuards(EmailGuard)
   @Post('login')
   login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     try {
