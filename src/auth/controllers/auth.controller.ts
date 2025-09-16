@@ -36,13 +36,13 @@ export class AuthController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, EmailGuard)
   @Get('profile')
   getProfile(@Request() req): User {
     return req.user as User;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, EmailGuard)
   @Get('logout')
   logout(@Res() res: Response) {
     res.clearCookie('jwt');

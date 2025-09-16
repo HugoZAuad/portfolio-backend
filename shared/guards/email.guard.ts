@@ -1,4 +1,9 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -10,9 +15,7 @@ export class EmailGuard implements CanActivate {
     const { email } = request.body;
 
     if (email !== 'hugozeymer@gmail.com') {
-      const response = context.switchToHttp().getResponse();
-      response.redirect('/');
-      return false;
+      throw new UnauthorizedException('Acesso negado.');
     }
 
     return true;

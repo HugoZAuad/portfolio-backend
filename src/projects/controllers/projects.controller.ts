@@ -6,7 +6,10 @@ import {
   Delete,
   Body,
   Param,
+  UseGuards,
 } from '@nestjs/common';
+
+import { JwtAuthGuard } from '../../../shared/guards/jwt-auth.guard';
 
 import { ProjectsReadService } from '../services/projects-read.service';
 import { ProjectsWriteService } from '../services/projects-write.service';
@@ -19,6 +22,7 @@ import {
   DeleteResponse,
   ProjectResponse,
 } from '../interface/project-response.interface';
+import { EmailGuard } from 'shared/guards/email.guard';
 
 @Controller('projects')
 export class ProjectsController {
@@ -29,16 +33,19 @@ export class ProjectsController {
     private readonly projectsDeleteService: ProjectsDeleteService,
   ) {}
 
+  @UseGuards(JwtAuthGuard, EmailGuard)
   @Get()
   async findAll(): Promise<ProjectWithImages[]> {
     return this.projectsReadService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard, EmailGuard)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<ProjectWithImages> {
     return this.projectsReadService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard, EmailGuard)
   @Post()
   async create(
     @Body() createProjectDto: CreateProjectDto,
@@ -46,6 +53,7 @@ export class ProjectsController {
     return this.projectsWriteService.create(createProjectDto);
   }
 
+  @UseGuards(JwtAuthGuard, EmailGuard)
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -54,6 +62,7 @@ export class ProjectsController {
     return this.projectsUpdateService.update(+id, updateProjectDto);
   }
 
+  @UseGuards(JwtAuthGuard, EmailGuard)
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<DeleteResponse> {
     return this.projectsDeleteService.delete(+id);
