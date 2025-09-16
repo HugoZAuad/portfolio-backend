@@ -36,13 +36,11 @@ export class SkillsController {
     private readonly skillsDeleteService: SkillsDeleteService,
   ) {}
 
-  @UseGuards(JwtAuthGuard, EmailGuard)
   @Get()
   async findAll(): Promise<SkillWithLevel[]> {
     return this.skillsFindAllService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard, EmailGuard)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<SkillWithLevel> {
     return this.skillsFindOneService.findOne(+id);

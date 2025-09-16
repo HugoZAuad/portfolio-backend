@@ -38,13 +38,11 @@ export class ProjectsController {
     private readonly projectsDeleteService: ProjectsDeleteService,
   ) {}
 
-  @UseGuards(JwtAuthGuard, EmailGuard)
   @Get()
   async findAll(): Promise<ProjectWithImages[]> {
     return this.projectsFindAllService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard, EmailGuard)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<ProjectWithImages> {
     return this.projectsFindOneService.findOne(+id);
