@@ -25,10 +25,10 @@ model ProjectImage {
 }
 
 enum SkillLevel {
-  basico
-  intermediario
-  avancado
-  especialista
+  Basico
+  Intermediario
+  Avancado
+  Especialista
 }
 
 model Skill {

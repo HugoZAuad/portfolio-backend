@@ -1,11 +1,5 @@
 import { IsString, IsEnum } from 'class-validator';
-
-enum SkillLevel {
-  basico = 'basico',
-  intermediario = 'intermediario',
-  avancado = 'avancado',
-  especialista = 'especialista',
-}
+import { SkillLevel } from '@prisma/client';
 
 export class CreateSkillDto {
   @IsString()
