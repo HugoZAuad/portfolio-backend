@@ -7,9 +7,19 @@ import { Reflector } from '@nestjs/core';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: [
+      'http://localhost:5173',
+      'https://portfolio-frontend-sand-five.vercel.app',
+    ],
+    credentials: true,
+  });
+
   app.use(cookieParser());
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalGuards(new JwtAuthGuard(new Reflector()));
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
