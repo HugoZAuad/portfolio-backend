@@ -41,7 +41,7 @@ export class AuthController {
     return req.user as User;
   }
 
-  @UseGuards(JwtAuthGuard, EmailGuard)
+  @Public()
   @Get('logout')
   logout(@Res() res: Response) {
     res.clearCookie('jwt');
