@@ -1,18 +1,7 @@
-import {
-  Body,
-  Controller,
-  Post,
-  UseGuards,
-  Request,
-  Get,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Post, Request, Get, Res } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { LoginDto } from '../DTO/login.dto';
-
-import { EmailGuard } from '../../../shared/guards/email.guard';
 import { Public } from '../../../shared/decorators/public.decorator';
-import { JwtAuthGuard } from '../../../shared/guards/jwt-auth.guard';
 import { Response } from 'express';
 import { User } from '../interface/user.interface';
 
@@ -35,7 +24,7 @@ export class AuthController {
     }
   }
 
-  @UseGuards(JwtAuthGuard, EmailGuard)
+  @Public()
   @Get('profile')
   getProfile(@Request() req): User {
     return req.user as User;
