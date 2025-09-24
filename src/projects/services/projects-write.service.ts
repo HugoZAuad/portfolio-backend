@@ -3,7 +3,6 @@ import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateProjectDto } from '../DTO/create-project.dto';
 import { ProjectResponse } from '../interface/project-response.interface';
 import { CloudinaryService } from './cloudinary.service';
-import { ProjectType } from '@prisma/client';
 import { ProjectWithImages } from '../interface/projects.interface';
 
 @Injectable()
@@ -21,7 +20,7 @@ export class ProjectsWriteService {
       data: {
         title: createProjectDto.title,
         description: createProjectDto.description,
-        type: createProjectDto.type as ProjectType,
+        type: createProjectDto.type,
         linkRepo: createProjectDto.linkRepo,
         linkDeploy: createProjectDto.linkDeploy,
       },
