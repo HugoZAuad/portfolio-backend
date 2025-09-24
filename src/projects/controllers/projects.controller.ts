@@ -20,7 +20,10 @@ import { ProjectsUpdateService } from '../services/projects-update.service';
 import { ProjectsDeleteService } from '../services/projects-delete.service';
 import { CreateProjectDto } from '../DTO/create-project.dto';
 import { UpdateProjectDto } from '../DTO/update-project.dto';
-import { ProjectWithImages } from '../interface/projects.interface';
+import {
+  PaginatedProjectsResponse,
+  ProjectWithImages,
+} from '../interface/projects.interface';
 import {
   DeleteResponse,
   ProjectResponse,
@@ -41,9 +44,9 @@ export class ProjectsController {
   @Public()
   @Get()
   async findAll(
-    @Query('page') page?: number,
-    @Query('limit') limit?: number,
-  ): Promise<ProjectWithImages[]> {
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ): Promise<PaginatedProjectsResponse> {
     return this.projectsFindAllService.findAll(page, limit);
   }
 
