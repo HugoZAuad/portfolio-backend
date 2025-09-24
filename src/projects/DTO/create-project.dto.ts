@@ -1,6 +1,5 @@
 import { IsString, IsOptional, IsUrl, IsIn } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { ProjectType } from '@prisma/client';
 
 export class CreateProjectDto {
   @IsString()
@@ -15,7 +14,7 @@ export class CreateProjectDto {
       (value as string).slice(1).toLowerCase(),
   )
   @IsIn(['Frontend', 'Backend', 'Fullstack'])
-  type: ProjectType;
+  type: string;
 
   @IsOptional()
   @IsUrl()

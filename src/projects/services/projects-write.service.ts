@@ -3,6 +3,8 @@ import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateProjectDto } from '../DTO/create-project.dto';
 import { ProjectResponse } from '../interface/project-response.interface';
 import { CloudinaryService } from './cloudinary.service';
+import { ProjectType } from '@prisma/client';
+import { ProjectWithImages } from '../interface/projects.interface';
 
 @Injectable()
 export class ProjectsWriteService {
@@ -19,7 +21,7 @@ export class ProjectsWriteService {
       data: {
         title: createProjectDto.title,
         description: createProjectDto.description,
-        type: createProjectDto.type,
+        type: createProjectDto.type as ProjectType,
         linkRepo: createProjectDto.linkRepo,
         linkDeploy: createProjectDto.linkDeploy,
       },
@@ -44,13 +46,13 @@ export class ProjectsWriteService {
 
       return {
         message: 'Projeto criado com sucesso',
-        data: updatedProject!,
+        data: updatedProject as ProjectWithImages,
       };
     }
 
     return {
       message: 'Projeto criado com sucesso',
-      data: project,
+      data: project as ProjectWithImages,
     };
   }
 }
