@@ -63,6 +63,8 @@ export class ProjectsController {
     @Body() createProjectDto: CreateProjectDto,
     @UploadedFiles() files?: Express.Multer.File[],
   ): Promise<ProjectResponse> {
+    console.log('DTO:', createProjectDto);
+    console.log('Files:', files);
     return this.projectsWriteService.create(createProjectDto, files);
   }
 
