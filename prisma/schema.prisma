@@ -14,13 +14,14 @@ enum ProjectType {
 }
 
 model Project {
-  id          Int            @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
   linkRepo    String?
   linkDeploy  String?
-  createdAt   DateTime       @default(now())
-  type        ProjectType    @default(Fullstack)
+  imageUrl    String?
+  type        ProjectType @default(Fullstack)
+  createdAt   DateTime @default(now())
   images      ProjectImage[]
 }
 
