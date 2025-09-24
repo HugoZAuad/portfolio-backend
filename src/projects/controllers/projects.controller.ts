@@ -28,7 +28,7 @@ import {
   DeleteResponse,
   ProjectResponse,
 } from '../interface/project-response.interface';
-import { EmailGuard } from 'shared/guards/email.guard';
+
 import { Public } from 'shared/decorators/public.decorator';
 
 @Controller('projects')
@@ -56,7 +56,7 @@ export class ProjectsController {
     return this.projectsFindOneService.findOne(+id);
   }
 
-  @UseGuards(JwtAuthGuard, EmailGuard)
+  @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(FilesInterceptor('image', 10))
   async create(
@@ -66,7 +66,7 @@ export class ProjectsController {
     return this.projectsWriteService.create(createProjectDto, files);
   }
 
-  @UseGuards(JwtAuthGuard, EmailGuard)
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -75,7 +75,7 @@ export class ProjectsController {
     return this.projectsUpdateService.update(+id, updateProjectDto);
   }
 
-  @UseGuards(JwtAuthGuard, EmailGuard)
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<DeleteResponse> {
     return this.projectsDeleteService.delete(+id);
