@@ -19,7 +19,7 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.useGlobalInterceptors(new LoggingInterceptor());
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalGuards(new JwtAuthGuard(new Reflector()));
 
   await app.listen(process.env.PORT ?? 3000);
