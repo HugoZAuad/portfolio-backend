@@ -4,12 +4,13 @@ import { CreateProjectDto } from '../DTO/create-project.dto';
 import { ProjectResponse } from '../interface/project-response.interface';
 import { CloudinaryService } from './cloudinary.service';
 import { ProjectWithImages } from '../interface/projects.interface';
+import { ProjectImage } from '@prisma/client';
 
 @Injectable()
 export class ProjectsWriteService {
   constructor(
-    private prisma: PrismaService,
-    private cloudinaryService: CloudinaryService,
+    private readonly prisma: PrismaService,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   async create(
@@ -27,15 +28,19 @@ export class ProjectsWriteService {
       include: { images: true },
     });
 
-    if (files && files.length > 0) {
+    if (files?.length) {
+      const uploadedImages: ProjectImage[] = [];
+
       for (const file of files) {
-        const uploadResult = await this.cloudinaryService.uploadImage(file);
-        await this.prisma.projectImage.create({
+        const uploadResult: { secure_url: string } =
+          await this.cloudinaryService.uploadImage(file);
+        const image = await this.prisma.projectImage.create({
           data: {
             url: uploadResult.secure_url,
             projectId: project.id,
           },
         });
+        uploadedImages.push(image);
       }
 
       const updatedProject = await this.prisma.project.findUnique({

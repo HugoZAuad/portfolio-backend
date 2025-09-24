@@ -10,9 +10,8 @@ export class CreateProjectDto {
   description: string;
 
   @Transform(
-    ({ value }) =>
-      (value as string).charAt(0).toUpperCase() +
-      (value as string).slice(1).toLowerCase(),
+    ({ value }: { value: string }) =>
+      value.charAt(0).toUpperCase() + value.slice(1).toLowerCase(),
   )
   @IsEnum(ProjectType)
   type: ProjectType;
