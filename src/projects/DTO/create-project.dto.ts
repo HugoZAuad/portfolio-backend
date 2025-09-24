@@ -1,4 +1,5 @@
-import { IsString, IsOptional, IsUrl } from 'class-validator';
+import { IsString, IsOptional, IsUrl, IsEnum } from 'class-validator';
+import { ProjectType } from '@prisma/client';
 
 export class CreateProjectDto {
   @IsString()
@@ -6,6 +7,9 @@ export class CreateProjectDto {
 
   @IsString()
   description: string;
+
+  @IsEnum(ProjectType)
+  type: ProjectType;
 
   @IsOptional()
   @IsUrl()

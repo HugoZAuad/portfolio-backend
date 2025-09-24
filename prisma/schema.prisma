@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ProjectType {
+  Frontend
+  Backend
+  Fullstack
+}
+
 model Project {
   id          Int            @id @default(autoincrement())
   title       String
@@ -14,6 +20,7 @@ model Project {
   linkRepo    String?
   linkDeploy  String?
   createdAt   DateTime       @default(now())
+  type        ProjectType    @default(Fullstack)
   images      ProjectImage[]
 }
 

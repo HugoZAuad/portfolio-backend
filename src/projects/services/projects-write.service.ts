@@ -16,7 +16,13 @@ export class ProjectsWriteService {
     files?: Express.Multer.File[],
   ): Promise<ProjectResponse> {
     const project = await this.prisma.project.create({
-      data: createProjectDto,
+      data: {
+        title: createProjectDto.title,
+        description: createProjectDto.description,
+        type: createProjectDto.type,
+        linkRepo: createProjectDto.linkRepo,
+        linkDeploy: createProjectDto.linkDeploy,
+      },
       include: { images: true },
     });
 
@@ -30,11 +36,12 @@ export class ProjectsWriteService {
           },
         });
       }
-      // Re-fetch to include the new images
+
       const updatedProject = await this.prisma.project.findUnique({
         where: { id: project.id },
         include: { images: true },
       });
+
       return {
         message: 'Projeto criado com sucesso',
         data: updatedProject!,

@@ -7,10 +7,13 @@ export class ProjectsFindAllService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(page = 1, limit = 10): Promise<ProjectWithImages[]> {
-    const skip = (page - 1) * limit;
+    const pageNumber = Number(page) || 1;
+    const limitNumber = Number(limit) || 10;
+    const skip = (pageNumber - 1) * limitNumber;
+
     return this.prisma.project.findMany({
       skip,
-      take: limit,
+      take: limitNumber,
       orderBy: { createdAt: 'desc' },
       include: { images: true },
     });
