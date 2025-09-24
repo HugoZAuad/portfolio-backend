@@ -27,6 +27,7 @@ import {
   ProjectResponse,
 } from '../interface/project-response.interface';
 import { EmailGuard } from 'shared/guards/email.guard';
+import { Public } from 'shared/decorators/public.decorator';
 
 @Controller('projects')
 export class ProjectsController {
@@ -38,11 +39,13 @@ export class ProjectsController {
     private readonly projectsDeleteService: ProjectsDeleteService,
   ) {}
 
+  @Public()
   @Get()
   async findAll(): Promise<ProjectWithImages[]> {
     return this.projectsFindAllService.findAll();
   }
 
+  @Public()
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<ProjectWithImages> {
     return this.projectsFindOneService.findOne(+id);

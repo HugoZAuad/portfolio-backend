@@ -25,6 +25,7 @@ import {
   SkillResponse,
   DeleteResponse,
 } from '../interface/skill-response.interface';
+import { Public } from 'shared/decorators/public.decorator';
 
 @Controller('skills')
 export class SkillsController {
@@ -36,11 +37,13 @@ export class SkillsController {
     private readonly skillsDeleteService: SkillsDeleteService,
   ) {}
 
+  @Public()
   @Get()
   async findAll(): Promise<SkillWithLevel[]> {
     return this.skillsFindAllService.findAll();
   }
 
+  @Public()
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<SkillWithLevel> {
     return this.skillsFindOneService.findOne(+id);
