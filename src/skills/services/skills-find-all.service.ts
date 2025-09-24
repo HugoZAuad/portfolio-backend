@@ -6,7 +6,12 @@ import { SkillWithLevel } from '../interface/skills.interface';
 export class SkillsFindAllService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(): Promise<SkillWithLevel[]> {
-    return this.prisma.skill.findMany();
+  async findAll(page = 1, limit = 10): Promise<SkillWithLevel[]> {
+    const skip = (page - 1) * limit;
+    return this.prisma.skill.findMany({
+      skip,
+      take: limit,
+      orderBy: { level: 'desc' },
+    });
   }
 }

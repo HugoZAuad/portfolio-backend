@@ -9,11 +9,10 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFiles,
+  Query,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-
 import { JwtAuthGuard } from '../../../shared/guards/jwt-auth.guard';
-
 import { ProjectsFindAllService } from '../services/projects-find-all.service';
 import { ProjectsFindOneService } from '../services/projects-find-one.service';
 import { ProjectsWriteService } from '../services/projects-write.service';
@@ -41,8 +40,11 @@ export class ProjectsController {
 
   @Public()
   @Get()
-  async findAll(): Promise<ProjectWithImages[]> {
-    return this.projectsFindAllService.findAll();
+  async findAll(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ): Promise<ProjectWithImages[]> {
+    return this.projectsFindAllService.findAll(page, limit);
   }
 
   @Public()
