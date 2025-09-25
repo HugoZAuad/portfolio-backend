@@ -6,9 +6,7 @@
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
-          "node_modules/@prisma/client/schema.prisma",
-          "node_modules/.prisma/client/query-engine-darwin-arm64",
-          "node_modules/.prisma/client/query-engine-linux-glibc-libssl1.1.0"
+          "node_modules/.prisma/client/libquery_engine-linux-musl.so.node"
         ]
       }
     }
