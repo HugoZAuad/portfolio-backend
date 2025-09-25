@@ -13,8 +13,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "prebuild": "npx prisma generate",
-    "postinstall": "npx prisma migrate deploy"
+    "prebuild": "npx prisma generate"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
