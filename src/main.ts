@@ -9,7 +9,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:5173',
-      'https://portfolio-frontend-sand-five.vercel.app/',
+      'https://portfolio-frontend-sand-five.vercel.app',
     ],
     credentials: true,
   });
