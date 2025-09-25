@@ -67,6 +67,7 @@ export class ProjectsController {
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
+  @UseInterceptors(FilesInterceptor('image', 1))
   async update(
     @Param('id') id: string,
     @Body() updateProjectDto: UpdateProjectDto,
