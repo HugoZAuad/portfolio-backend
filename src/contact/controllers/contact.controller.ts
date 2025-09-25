@@ -1,3 +1,4 @@
+// ARQUIVO: contact.controller.ts
 import { Body, Controller, Post } from '@nestjs/common';
 import { ContactService } from '../services/contact.service';
 import { ContactDto } from '../DTO/contact.dto';
@@ -9,10 +10,10 @@ export class ContactController {
 
   @Public()
   @Post()
-  async handleContact(
-    @Body() contactDto: ContactDto,
-  ): Promise<{ success: boolean }> {
-    await this.contactService.sendEmail(contactDto);
+  handleContact(@Body() contactDto: ContactDto): { success: boolean } {
+    this.contactService.sendEmail(contactDto).catch((error) => {
+      console.error('Erro no envio de e-mail em segundo plano:', error);
+    });
     return { success: true };
   }
 }
