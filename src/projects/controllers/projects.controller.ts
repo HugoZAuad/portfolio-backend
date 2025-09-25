@@ -1,4 +1,3 @@
-// src/projects/controllers/projects.controller.ts
 import {
   Controller,
   Get,
@@ -52,10 +51,8 @@ export class ProjectsController {
 
   @Public()
   @Get(':id')
-  async findOne(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<ProjectWithImages> {
-    return this.projectsFindOneService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<ProjectWithImages> {
+    return this.projectsFindOneService.findOne(+id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -71,16 +68,16 @@ export class ProjectsController {
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateProjectDto: UpdateProjectDto,
   ): Promise<ProjectResponse> {
-    return this.projectsUpdateService.update(id, updateProjectDto);
+    return this.projectsUpdateService.update(+id, updateProjectDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    await this.projectsDeleteService.delete(id);
+  async delete(@Param('id') id: string): Promise<void> {
+    await this.projectsDeleteService.delete(+id);
   }
 }
