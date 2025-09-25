@@ -40,6 +40,15 @@ enum SkillLevel {
   EXPERIENTE
 }
 
+enum SkillCategory {
+  FRONTEND
+  BACKEND
+  SOFTSKILLS
+  DEVOPS
+  BANCO_DE_DADOS
+}
+
+
 model Skill {
   id    Int      @id @default(autoincrement())
   name  String
