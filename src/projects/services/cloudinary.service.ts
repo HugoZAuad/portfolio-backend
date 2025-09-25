@@ -45,8 +45,15 @@ export class CloudinaryService {
       });
       return result;
     } catch (error) {
-      this.logger.error('Erro no upload da imagem para Cloudinary', error);
-      throw new Error(error.message);
+      if (error instanceof Error) {
+        this.logger.error(
+          'Erro no upload da imagem para Cloudinary',
+          error.message,
+        );
+        throw new Error(error.message);
+      }
+      this.logger.error('Erro desconhecido no upload da imagem');
+      throw new Error('Erro desconhecido');
     }
   }
 }

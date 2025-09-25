@@ -10,6 +10,7 @@ import { ProjectsUpdateService } from './services/projects-update.service';
 import { ProjectsDeleteService } from './services/projects-delete.service';
 import { CloudinaryService } from './services/cloudinary.service';
 import { FileContentMiddleware } from './middleware/file-content.middleware';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { FileContentMiddleware } from './middleware/file-content.middleware';
     MulterModule.register({
       storage: memoryStorage(),
     }),
+    ConfigModule,
   ],
   controllers: [ProjectsController],
   providers: [

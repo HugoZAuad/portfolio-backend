@@ -1,10 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
-import { LoggingInterceptor } from '../shared/interceptors/logging.interceptor';
-import { JwtAuthGuard } from '../shared/guards/jwt-auth.guard';
-import { Reflector } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,10 +15,20 @@ async function bootstrap() {
   });
 
   app.use(cookieParser());
-  app.useGlobalInterceptors(new LoggingInterceptor());
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.useGlobalGuards(new JwtAuthGuard(new Reflector()));
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
 
   await app.listen(process.env.PORT ?? 3000);
+  Logger.log(
+    `Servidor rodando na porta ${process.env.PORT ?? 3000}`,
+    'NestApplication',
+  );
 }
-bootstrap();
+
+void bootstrap();

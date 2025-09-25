@@ -1,3 +1,4 @@
+// src/projects/controllers/projects.controller.ts
 import {
   Controller,
   Get,
@@ -10,6 +11,9 @@ import {
   UseInterceptors,
   UploadedFiles,
   Query,
+  ParseIntPipe,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../../../shared/guards/jwt-auth.guard';
@@ -24,10 +28,7 @@ import {
   PaginatedProjectsResponse,
   ProjectWithImages,
 } from '../interface/projects.interface';
-import {
-  DeleteResponse,
-  ProjectResponse,
-} from '../interface/project-response.interface';
+import { ProjectResponse } from '../interface/project-response.interface';
 import { Public } from 'shared/decorators/public.decorator';
 
 @Controller('projects')
@@ -43,16 +44,18 @@ export class ProjectsController {
   @Public()
   @Get()
   async findAll(
-    @Query('page') page?: string,
-    @Query('limit') limit?: string,
+    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
+    @Query('limit', new ParseIntPipe({ optional: true })) limit = 10,
   ): Promise<PaginatedProjectsResponse> {
     return this.projectsFindAllService.findAll(page, limit);
   }
 
   @Public()
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<ProjectWithImages> {
-    return this.projectsFindOneService.findOne(+id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ProjectWithImages> {
+    return this.projectsFindOneService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -68,15 +71,16 @@ export class ProjectsController {
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateProjectDto: UpdateProjectDto,
   ): Promise<ProjectResponse> {
-    return this.projectsUpdateService.update(+id, updateProjectDto);
+    return this.projectsUpdateService.update(id, updateProjectDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<DeleteResponse> {
-    return this.projectsDeleteService.delete(+id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    await this.projectsDeleteService.delete(id);
   }
 }

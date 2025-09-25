@@ -4,30 +4,26 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ProjectsModule } from './projects/projects.module';
 import { SkillsModule } from './skills/skills.module';
-import { PrismaModule } from '../prisma/prisma.module';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from '../shared/guards/jwt.strategy';
-import { ConfigModule } from '@nestjs/config';
 import { ContactModule } from './contact/contact.module';
+import { PrismaModule } from '../prisma/prisma.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from '../shared/guards/jwt-auth.guard';
 
 @Module({
   imports: [
-    PrismaModule,
     AuthModule,
     ProjectsModule,
     SkillsModule,
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'secretKey',
-      signOptions: { expiresIn: '4h' },
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
     ContactModule,
+    PrismaModule,
   ],
   controllers: [AppController],
-  providers: [AppService, JwtStrategy],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

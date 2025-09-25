@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
@@ -23,10 +23,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         ExtractJwt.fromAuthHeaderAsBearerToken(),
         (req: Request): string | undefined => {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-          return typeof req.cookies === 'object'
-            ? req.cookies['jwt']
-            : undefined;
+          if (req.cookies && req.cookies.jwt) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            return req.cookies.jwt;
+          }
+          return undefined;
         },
       ]),
       ignoreExpiration: false,
@@ -35,6 +36,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: JwtPayload): AuthenticatedUser {
+    if (!payload || payload.email !== process.env.ADMIN_EMAIL) {
+      throw new UnauthorizedException();
+    }
     return {
       userId: payload.sub,
       email: payload.email,

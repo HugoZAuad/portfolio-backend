@@ -4,6 +4,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { PaginatedProjectsResponse } from '../interface/projects.interface';
 
 @Injectable()
 export class ProjectsFindAllService {
@@ -11,22 +12,14 @@ export class ProjectsFindAllService {
 
   constructor(private prisma: PrismaService) {}
 
-  async findAll(page = '1', limit = '10') {
+  async findAll(page = 1, limit = 10): Promise<PaginatedProjectsResponse> {
     try {
-      this.logger.log(`Buscando projetos - Página: ${page}, Limite: ${limit}`);
-
-      const pageNumber = parseInt(page, 10) || 1;
-      const limitNumber = parseInt(limit, 10) || 10;
-      const skip = (pageNumber - 1) * limitNumber;
-
-      this.logger.log(
-        `Parâmetros calculados - Página: ${pageNumber}, Limite: ${limitNumber}, Skip: ${skip}`,
-      );
+      const skip = (page - 1) * limit;
 
       const [projects, total] = await Promise.all([
         this.prisma.project.findMany({
           skip,
-          take: limitNumber,
+          take: limit,
           orderBy: { createdAt: 'desc' },
           include: { images: true },
         }),
@@ -35,28 +28,17 @@ export class ProjectsFindAllService {
 
       const hasMore = skip + projects.length < total;
 
-      this.logger.log(
-        `Projetos encontrados: ${projects.length}, Total: ${total}, Tem mais: ${hasMore}`,
-      );
-
       return {
         projects,
         total,
-        page: pageNumber,
-        limit: limitNumber,
+        page,
+        limit,
         hasMore,
       };
     } catch (error) {
       this.logger.error('Erro ao buscar projetos:', error);
-
-      if (error.code === 'P1001' || error.message.includes('connect')) {
-        throw new InternalServerErrorException(
-          'Erro de conexão com o banco de dados. Tente novamente mais tarde.',
-        );
-      }
-
       throw new InternalServerErrorException(
-        'Erro interno do servidor. Tente novamente mais tarde.',
+        'Ocorreu um erro ao buscar os projetos.',
       );
     }
   }

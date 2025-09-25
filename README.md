@@ -1,145 +1,165 @@
-# Portfolio Backend API
+# Portfolio API Backend
 
-API backend construída com NestJS para gerenciar projetos e habilidades.
-
----
-
-## Tecnologias Utilizadas
-
-- [NestJS](https://nestjs.com/) - Framework Node.js para construção de APIs escaláveis.
-- [TypeScript](https://www.typescriptlang.org/) - Superset do JavaScript com tipagem estática.
-- [Prisma](https://www.prisma.io/) - ORM para banco de dados.
-- [Cloudinary](https://cloudinary.com/) - Serviço para upload e gerenciamento de imagens.
-- [JWT](https://jwt.io/) - Autenticação via JSON Web Tokens.
-- [Multer](https://github.com/expressjs/multer) - Middleware para upload de arquivos.
+API backend robusta e escalável desenvolvida com NestJS para gerenciar projetos, habilidades e dados de contato para o seu portfólio.
 
 ---
 
-## Requisitos
+## 💻 Tecnologias Utilizadas
 
-- Node.js >= 16
-- Banco de dados configurado e migrado via Prisma
-- Conta Cloudinary com credenciais configuradas no `.env`
-
----
-
-## Configuração do Ambiente
-
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
-
-```
-DATABASE_URL="sua_string_de_conexao"
-JWT_SECRET="seu_segredo_jwt"
-CLOUDINARY_CLOUD_NAME="seu_cloud_name"
-CLOUDINARY_API_KEY="sua_api_key"
-CLOUDINARY_API_SECRET="seu_api_secret"
-```
+-   **[NestJS](https://nestjs.com/)**: Framework Node.js para construção de APIs.
+-   **[TypeScript](https://www.typescriptlang.org/)**: Linguagem com tipagem estática para maior segurança e escalabilidade.
+-   **[Prisma](https://www.prisma.io/)**: ORM para acesso ao banco de dados PostgreSQL.
+-   **[Cloudinary](https://cloudinary.com/)**: Serviço de gerenciamento de assets digitais para upload de imagens.
+-   **[JWT](https://jwt.io/)**: JSON Web Tokens para autenticação.
+-   **[Multer](https://github.com/expressjs/multer)**: Middleware para manipulação de uploads de arquivos.
+-   **[Eslint & Prettier](https://eslint.org/)**: Para padronização e formatação de código.
+-   **[Docker](https://www.docker.com/)**: Para ambientes de desenvolvimento e produção consistentes.
 
 ---
 
-## Como Rodar
+## ⚙️ Pré-requisitos
 
-```bash
-npm install
-npm run start:dev
-```
+Antes de começar, certifique-se de ter instalado:
 
-A API estará disponível em `http://localhost:3000`.
-
----
-
-## Endpoints
-
-### Auth
-
-- `POST /auth/login`  
-  Login do usuário. Recebe JSON com `email` e `password`. Retorna token JWT via cookie.
-
-- `GET /auth/profile`  
-  Retorna dados do usuário autenticado. Requer JWT.
-
-- `GET /auth/logout`  
-  Faz logout limpando o cookie JWT.
+* Node.js (versão >= 16)
+* npm ou yarn
+* PostgreSQL
+* Uma conta no Cloudinary
 
 ---
 
-### Projects
+## 🛠️ Configuração do Projeto
 
-- `GET /projects`  
-  Lista todos os projetos. Requer JWT.
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+    cd seu-repositorio
+    ```
 
-- `GET /projects/:id`  
-  Busca projeto por ID. Requer JWT.
+2.  **Crie o arquivo de variáveis de ambiente:**
+    Crie um arquivo `.env` na raiz do projeto e preencha com suas credenciais:
 
-- `POST /projects`  
-  Cria um novo projeto. Requer JWT.  
-  Aceita campos no body (form-data):  
-  - `title` (string, obrigatório)  
-  - `description` (string, obrigatório)  
-  - `linkRepo` (string, URL, opcional)  
-  - `linkDeploy` (string, URL, opcional)  
-  - `image` (arquivo, aceita múltiplos arquivos)  
+    ```env
+    # Configuração do Banco de Dados
+    DATABASE_URL="postgresql://user:password@host:port/database"
+    
+    # Segredos de Autenticação JWT
+    JWT_SECRET="seu_segredo_jwt_aqui"
+    ADMIN_EMAIL="seu_email@dominio.com"
+    PASS="sua_senha_secreta"
+    
+    # Configuração do Cloudinary
+    CLOUDINARY_CLOUD_NAME="seu_cloud_name"
+    CLOUDINARY_API_KEY="sua_api_key"
+    CLOUDINARY_API_SECRET="seu_api_secret"
+    ```
 
-- `PATCH /projects/:id`  
-  Atualiza projeto por ID. Requer JWT.
+3.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
 
-- `DELETE /projects/:id`  
-  Deleta projeto por ID. Requer JWT.
-
----
-
-### Skills
-
-- `GET /skills`  
-  Lista todas as habilidades. Requer JWT.
-
-- `GET /skills/:id`  
-  Busca habilidade por ID. Requer JWT.
-
-- `POST /skills`  
-  Cria nova habilidade. Requer JWT.  
-  Campos JSON:  
-  - `name` (string, obrigatório)  
-  - `level` (enum: Basico, Intermediario, Avançado, Especialista)
-
-- `PATCH /skills/:id`  
-  Atualiza habilidade por ID. Requer JWT.
-
-- `DELETE /skills/:id`  
-  Deleta habilidade por ID. Requer JWT.
+4.  **Execute as migrações do Prisma:**
+    ```bash
+    npx prisma migrate dev --name init
+    ```
 
 ---
 
-## Como Testar Upload de Imagens
+## ▶️ Como Rodar
 
-No endpoint `POST /projects`, para enviar imagens:
+* **Modo de Desenvolvimento:**
+    ```bash
+    npm run start:dev
+    ```
+    A API estará disponível em `http://localhost:3000`.
 
-- Use `multipart/form-data`.
-- Para múltiplas imagens, envie várias vezes a chave `image` com arquivos diferentes.
-- Exemplo no Postman:  
-  - Chave: `title`, valor: "Meu Projeto"  
-  - Chave: `description`, valor: "Descrição do projeto"  
-  - Chave: `image`, tipo: File, selecione arquivo 1  
-  - Chave: `image`, tipo: File, selecione arquivo 2  
-  - ...
-
----
-
-## Observações
-
-- O middleware valida se os arquivos enviados não estão vazios.
-- O upload é feito para o Cloudinary e as URLs são salvas no banco.
-- Autenticação é feita via JWT em cookie ou header Authorization.
+* **Modo de Produção:**
+    ```bash
+    npm run build
+    npm run start:prod
+    ```
 
 ---
 
-## Contato
+## 🗺️ Endpoints da API
 
-Desenvolvido por Hugo.  
-Para dúvidas ou contribuições, abra uma issue ou pull request.
+### `Auth` (Autenticação)
+
+* `POST /auth/login`
+    Faz login do usuário. Requer `email` e `password` no corpo da requisição (JSON). O token JWT é retornado e armazenado em um cookie `jwt`.
+
+* `GET /auth/profile`
+    Retorna os dados do usuário autenticado. **Requer Autenticação JWT.**
+
+* `GET /auth/logout`
+    Limpa o cookie JWT e encerra a sessão.
+
+### `Projects` (Projetos)
+
+* `GET /projects`
+    Lista todos os projetos de forma paginada. **Endpoint Público.**
+    Parâmetros de query (opcionais): `?page=1&limit=10`
+
+* `GET /projects/:id`
+    Retorna um projeto específico. **Endpoint Público.**
+
+* `POST /projects`
+    Cria um novo projeto. **Requer Autenticação JWT.**
+    -   `Content-Type`: `multipart/form-data`
+    -   Campos no body: `title`, `description`, `linkRepo` (opcional), `linkDeploy` (opcional).
+    -   Arquivos: `image` (suporta múltiplos arquivos).
+
+* `PATCH /projects/:id`
+    Atualiza um projeto existente. **Requer Autenticação JWT.**
+
+* `DELETE /projects/:id`
+    Deleta um projeto. **Requer Autenticação JWT.** Retorna `204 No Content` em caso de sucesso.
+
+### `Skills` (Habilidades)
+
+* `GET /skills`
+    Lista todas as habilidades. **Endpoint Público.**
+
+* `GET /skills/:id`
+    Retorna uma habilidade específica. **Endpoint Público.**
+
+* `POST /skills`
+    Cria uma nova habilidade. **Requer Autenticação JWT.**
+    -   `Content-Type`: `application/json`
+    -   Campos no body: `name` e `level` (`Basico`, `Intermediario`, `Avancado`, `Especialista`).
+
+* `PATCH /skills/:id`
+    Atualiza uma habilidade. **Requer Autenticação JWT.**
+
+* `DELETE /skills/:id`
+    Deleta uma habilidade. **Requer Autenticação JWT.** Retorna `204 No Content` em caso de sucesso.
+
+### `Contact` (Contato)
+
+* `POST /contact`
+    Envia uma mensagem de contato. **Endpoint Público.**
+    -   `Content-Type`: `application/json`
+    -   Campos no body: `name`, `email` e `message`.
 
 ---
 
-## Licença
+## 🤝 Como Contribuir
 
-MIT License
+1.  Faça um `fork` do projeto.
+2.  Crie uma nova `branch` (`git checkout -b feature/sua-feature`).
+3.  Faça suas mudanças (`git commit -am 'feat: adicionei nova feature'`).
+4.  Envie suas mudanças para o seu `fork` (`git push origin feature/sua-feature`).
+5.  Abra um `Pull Request` detalhado.
+
+---
+
+## 📄 Licença
+
+Este projeto está licenciado sob a Licença MIT.
+
+---
+
+## 👨‍💻 Contato
+
+Desenvolvido por [Hugo](https://github.com/hugozeymer). Sinta-se à vontade para entrar em contato para dúvidas ou sugestões.
