@@ -9,9 +9,9 @@ datasource db {
 }
 
 enum ProjectType {
-  FRONTEND
-  BACKEND
-  FULLSTACK
+  Frontend
+  Backend
+  Fullstack
 }
 
 model Project {
@@ -21,7 +21,7 @@ model Project {
   linkRepo    String?
   linkDeploy  String?
   imageUrl    String?
-  type        ProjectType @default(FULLSTACK)
+  type        ProjectType @default(Fullstack)
   createdAt   DateTime @default(now())
   images      ProjectImage[]
 }
