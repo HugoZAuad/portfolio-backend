@@ -50,7 +50,8 @@ enum SkillCategory {
 
 
 model Skill {
-  id    Int      @id @default(autoincrement())
-  name  String
-  level SkillLevel
+  id      Int           @id @default(autoincrement())
+  name    String
+  level   SkillLevel
+  category SkillCategory @default(FRONTEND)
 }

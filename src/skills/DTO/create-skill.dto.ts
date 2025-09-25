@@ -1,5 +1,5 @@
 import { IsString, IsEnum } from 'class-validator';
-import { SkillLevel } from '@prisma/client';
+import { SkillLevel, SkillCategory } from '@prisma/client';
 
 export class CreateSkillDto {
   @IsString()
@@ -7,4 +7,7 @@ export class CreateSkillDto {
 
   @IsEnum(SkillLevel)
   level: SkillLevel;
+
+  @IsEnum(SkillCategory)
+  category: SkillCategory;
 }
