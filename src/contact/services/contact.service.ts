@@ -14,7 +14,7 @@ export class ContactService {
       this.configService.get<string>('ADMIN_EMAIL') ??
       'email-de-seguranca@hugozeymer.dev';
     const senderEmail =
-      this.configService.get<string>('ADMIN_EMAIL') ?? 'contato@default.com';
+      this.configService.get<string>('SENDER_EMAIL') ?? 'contato@default.com';
 
     if (!apiKey) {
       throw new Error('BREVO_API_KEY não configurada.');
@@ -23,6 +23,7 @@ export class ContactService {
     const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 
     const emailData = {
+      // O remetente DEVE ser o email verificado no Brevo
       sender: { email: senderEmail, name: 'Portfólio Contato' },
       to: [{ email: adminEmail }],
       subject: `Nova Mensagem: ${contact.name}`,
@@ -45,7 +46,7 @@ export class ContactService {
       });
     } catch (error) {
       console.error(
-        'Falha no envio do e-mail:',
+        'Falha no envio do e-mail via Brevo:',
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         error.response?.data || error.message,
       );
