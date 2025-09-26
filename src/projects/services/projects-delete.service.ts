@@ -6,16 +6,32 @@ import { DeleteResponse } from '../interface/projects.interface';
 export class ProjectsDeleteService {
   constructor(private prisma: PrismaService) {}
 
-  async delete(id: number): Promise<DeleteResponse> {
+  async delete(idString: string): Promise<DeleteResponse> {
+    const id = parseInt(idString, 10);
+    if (isNaN(id)) {
+      throw new NotFoundException('ID do projeto inválido.');
+    }
+
     try {
+      await this.prisma.projectImage.deleteMany({
+        where: {
+          projectId: id,
+        },
+      });
+
       await this.prisma.project.delete({
         where: { id },
       });
+
       return {
         message: 'Projeto deletado com sucesso',
       };
-    } catch {
-      throw new NotFoundException('Projeto não encontrado');
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (error.code === 'P2025' || error instanceof NotFoundException) {
+        throw new NotFoundException('Projeto não encontrado');
+      }
+      throw error;
     }
   }
 }
