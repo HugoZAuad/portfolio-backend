@@ -71,8 +71,10 @@ export class ProjectsController {
   async update(
     @Param('id') id: string,
     @Body() updateProjectDto: UpdateProjectDto,
+    @UploadedFiles() files?: Express.Multer.File[],
   ): Promise<ProjectResponse> {
-    return this.projectsUpdateService.update(+id, updateProjectDto);
+    const file = files && files.length > 0 ? files[0] : undefined;
+    return this.projectsUpdateService.update(+id, updateProjectDto, file);
   }
 
   @UseGuards(JwtAuthGuard)
