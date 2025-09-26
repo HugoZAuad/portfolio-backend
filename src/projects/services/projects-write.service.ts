@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateProjectDto } from '../DTO/create-project.dto';
-import { ProjectResponse } from '../interface/project-response.interface';
+import { ProjectResponse } from '../interface/projects.interface';
 import { CloudinaryService } from './cloudinary.service';
 import { ProjectWithImages } from '../interface/projects.interface';
 import { ProjectImage } from '@prisma/client';

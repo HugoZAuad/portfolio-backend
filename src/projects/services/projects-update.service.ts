@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { UpdateProjectDto } from '../DTO/update-project.dto';
-import { ProjectResponse } from '../interface/project-response.interface';
+import { ProjectResponse } from '../interface/projects.interface';
 import { ProjectWithImages } from '../interface/projects.interface';
 
 @Injectable()

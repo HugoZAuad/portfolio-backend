@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { DeleteResponse } from '../interface/project-response.interface';
+import { DeleteResponse } from '../interface/projects.interface';
 
 @Injectable()
 export class ProjectsDeleteService {
