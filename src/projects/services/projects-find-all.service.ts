@@ -22,7 +22,7 @@ export class ProjectsFindAllService {
     } as ProjectResponseFrontend;
   }
 
-  async findAll(page = 1, limit = 10): Promise<PaginatedProjectsResponse> {
+  async findAll(page = 1, limit = 100): Promise<PaginatedProjectsResponse> {
     const skip = (page - 1) * limit;
 
     const [projects, total] = await this.prisma.$transaction([
