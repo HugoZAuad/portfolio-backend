@@ -27,7 +27,7 @@ import {
   PaginatedProjectsResponse,
   ProjectWithImages,
 } from '../interface/projects.interface';
-import { ProjectResponse } from '../interface/project-response.interface';
+import { ProjectResponse } from '../interface/projects.interface';
 import { Public } from 'shared/decorators/public.decorator';
 
 @Controller('projects')
