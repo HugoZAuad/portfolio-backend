@@ -1,60 +1,54 @@
 // ARQUIVO: contact.service.ts
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Resend } from 'resend';
 import { ContactDto } from '../DTO/contact.dto';
+import { ConfigService } from '@nestjs/config';
+import axios from 'axios';
 
 @Injectable()
 export class ContactService {
-  private resend: Resend;
-
-  constructor(private configService: ConfigService) {
-    const apiKey = this.configService.get<string>('RESEND_API_KEY');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-    this.resend = new Resend(apiKey);
-  }
+  constructor(private configService: ConfigService) {}
 
   async sendEmail(contact: ContactDto): Promise<void> {
+    const apiKey = this.configService.get<string>('BREVO_API_KEY');
     const adminEmail =
       this.configService.get<string>('ADMIN_EMAIL') ??
       'email-de-seguranca@hugozeymer.dev';
-    const sendingDomain =
-      this.configService.get<string>('RESEND_SENDING_DOMAIN') ?? 'resend.dev';
+    const senderEmail =
+      this.configService.get<string>('ADMIN_EMAIL') ?? 'contato@default.com';
 
-    const fromAddress = `Portfólio Contato <contato@${sendingDomain}>`;
-    const htmlContent = `
-        <html>
-            <body style="font-family: sans-serif; line-height: 1.6;">
-                <h2>Nova Mensagem de Contato</h2>
-                <p><strong>Nome:</strong> ${contact.name}</p>
-                <p><strong>Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>
-                <h3>Mensagem:</h3>
-                <p style="white-space: pre-wrap; padding: 10px; border-left: 3px solid #007bff; background-color: #f8f9fa;">${contact.message}</p>
-            </body>
-        </html>
-    `;
+    if (!apiKey) {
+      throw new Error('BREVO_API_KEY não configurada.');
+    }
 
-    const textContent = `
-        Nova Mensagem de Contato
-        Nome: ${contact.name}
-        Email: ${contact.email}
-        Mensagem:
-        ${contact.message}
-    `;
+    const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
+
+    const emailData = {
+      sender: { email: senderEmail, name: 'Portfólio Contato' },
+      to: [{ email: adminEmail }],
+      subject: `Nova Mensagem: ${contact.name}`,
+      htmlContent: `
+          <h3>Nova Mensagem de Contato</h3>
+          <p><strong>Nome:</strong> ${contact.name}</p>
+          <p><strong>Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>
+          <p><strong>Mensagem:</strong></p>
+          <p>${contact.message.replace(/\n/g, '<br>')}</p>
+      `,
+      replyTo: { email: contact.email, name: contact.name },
+    };
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      await this.resend.emails.send({
-        from: fromAddress,
-        to: adminEmail, // Agora o tipo é string, resolvendo o erro
-        subject: `Nova Mensagem: ${contact.name}`,
-        html: htmlContent,
-        text: textContent,
-        replyTo: contact.email,
+      await axios.post(BREVO_API_URL, emailData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': apiKey,
+        },
       });
     } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      console.error('Falha no envio do e-mail com Resend:', error.message);
+      console.error(
+        'Falha no envio do e-mail:',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        error.response?.data || error.message,
+      );
       throw new Error('Falha na comunicação com o serviço de e-mail.');
     }
   }
