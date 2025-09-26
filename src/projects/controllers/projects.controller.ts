@@ -79,6 +79,6 @@ export class ProjectsController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string): Promise<void> {
-    await this.projectsDeleteService.delete(+id);
+    await this.projectsDeleteService.delete(id);
   }
 }
